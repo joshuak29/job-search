@@ -1,7 +1,3 @@
-<script setup></script>
-
 <template>
-  <h1 class="text-3xl font-bold underline">Hello vue</h1>
+  <h1 class="mt-8 text-center text-6xl">Hello Vue</h1>
 </template>
-
-<style scoped></style>
