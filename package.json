@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 4173",
-    "test:unit": "vitest --environment jsdom",
+    "test:unit": "vitest --environment jsdom --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
@@ -13,7 +13,11 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/vue": "^6.6.1",
     "@vitejs/plugin-vue": "^3.2.0",
+    "@vitest/coverage-c8": "^0.27.1",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/test-utils": "^2.2.4",
     "autoprefixer": "^10.4.13",
