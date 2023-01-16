@@ -36,6 +36,7 @@
 			<global-button v-else @click="isLoggedIn = true"  text="Sign In"/>
 		</div>
       </div>
+	  <the-subnav v-if="isLoggedIn"  />
     </div>
   </header>
 </template>
@@ -43,15 +44,16 @@
 <script>
 import GlobalButton from "./GlobalButton.vue";
 import ProfileImage from "./ProfileImage.vue";
+import TheSubnav from "./TheSubnav.vue";
 
 export default {
   name: "MainNav",
   data() {
     return {
       company: "Careers",
-	  isLoggedIn: false
+	  isLoggedIn: false,
     };
   },
-  components: { GlobalButton, ProfileImage }
+  components: { GlobalButton, ProfileImage, TheSubnav }
 };
 </script>

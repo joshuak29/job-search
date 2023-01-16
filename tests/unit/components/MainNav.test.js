@@ -4,16 +4,25 @@ import userEvent from "@testing-library/user-event"   //import userEvent from in
 import { describe, it, expect } from "vitest";
 
 import MainNav from "@/components/MainNav.vue";
-
+const renderMainNav = () => {
+		render(MainNav, {
+			global: {
+				stubs: {
+					FontAwesomeIcon: true,
+				}
+			}
+		})
+	}
 describe("MainNav", () => {
+	
   it("displays company name", () => {
-    render(MainNav);
+    renderMainNav()
     //screen.debug();
     const Name = screen.getByText("Kigali Careers");
     expect(Name).toBeInTheDocument();
   });
   it("displays the navigation links texts", () => {
-	  render(MainNav);
+	  renderMainNav();
 	  const navigationTexts = screen.getAllByRole("link")
 	  const navigationTextsArray = navigationTexts.map((linkTexts) => linkTexts.textContent)
 	  //console.log(navigationTextsArray)
@@ -23,7 +32,7 @@ describe("MainNav", () => {
 
 describe("When User Logs in", () => {
 	it("displays profile picture", async () => {
-		render(MainNav)
+		renderMainNav()
 		// screen.debug()
 		
 		const profilePic = screen.queryByRole("img", {
