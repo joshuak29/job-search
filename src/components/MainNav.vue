@@ -30,18 +30,28 @@
             </li>
           </ul>
         </nav>
+		<div class="ml-auto items-center flex h-full">
+			
+			<profile-image v-if="isLoggedIn" />
+			<global-button v-else @click="isLoggedIn = true"  text="Sign In"/>
+		</div>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import GlobalButton from "./GlobalButton.vue";
+import ProfileImage from "./ProfileImage.vue";
+
 export default {
   name: "MainNav",
   data() {
     return {
       company: "Careers",
+	  isLoggedIn: false
     };
   },
+  components: { GlobalButton, ProfileImage }
 };
 </script>

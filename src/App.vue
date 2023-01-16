@@ -1,5 +1,6 @@
 <template>
   <main-nav />
+  
   <!-- all these would work too  & <MainNav></MainNav>, <MainNav /> & <main-nav></main-nav>-->
 </template>
 <script>
