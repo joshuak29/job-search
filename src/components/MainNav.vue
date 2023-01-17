@@ -1,6 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <header class="w-full text-sm">
+  <header :class="['w-full', 'text-sm', 'h-16', { 'h-32': isLoggedIn }]">
     <div class="fixed top-0 left-0 h-16 w-full bg-white">
       <div
         class="mx-auto flex h-full flex-nowrap border-b border-solid border-brand-gray-1 px-8"
@@ -33,7 +33,7 @@
 		<div class="ml-auto items-center flex h-full">
 			
 			<profile-image v-if="isLoggedIn" />
-			<global-button v-else @click="isLoggedIn = true"  text="Sign In"/>
+			<global-button v-else @click="isLoggedIn = true"  text="Sign In" />
 		</div>
       </div>
 	  <the-subnav v-if="isLoggedIn"  />

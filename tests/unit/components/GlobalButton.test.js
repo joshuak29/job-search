@@ -3,7 +3,7 @@ import {describe, it, expect} from "vitest";
 
 import GlobalButton from "@/components/GlobalButton.vue";
 
-describe("GlobalButton" () => {
+describe("GlobalButton", () => {
 	it("renders text", () => {
 		render(GlobalButton, {
 			props: {
@@ -11,23 +11,24 @@ describe("GlobalButton" () => {
 				type: "primary"
 			}
 		});
-		const button = screen.geByRole('buttton', {
+		const button = screen.getByRole('button', {
 			name: /click me/i
 		});
 		expect(button).toBeInTheDocument();
-	})
+	});
 	it("applies a class", () => {
 		render(GlobalButton, {
 			props: {
 				text: "Search",
 				type: "secondary"
 			}
-	}
 		})
-		button = screen.queryByRole('button', {
+		const button = screen.getByRole('button', {
 			name: /search/i,
-		})
+		});
 		expect(button).toHaveClass("secondary")
-		
 	})
+	 
+	
+		
 })
