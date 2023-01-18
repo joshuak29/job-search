@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import GlobalButton from "./GlobalButton.vue";
-import ProfileImage from "./ProfileImage.vue";
-import TheSubnav from "./TheSubnav.vue";
+import GlobalButton from "@/components/shared/GlobalButton.vue";
+import ProfileImage from "@/components/navigation/ProfileImage.vue";
+import TheSubnav from "@/components/navigation/TheSubnav.vue";
 
 export default {
   name: "MainNav",

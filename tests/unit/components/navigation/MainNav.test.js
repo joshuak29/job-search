@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event"   //import userEvent from installed library to stimulate events
 import { describe, it, expect } from "vitest";
 
-import MainNav from "@/components/MainNav.vue";
+import MainNav from "@/components/navigation/MainNav.vue";
 const renderMainNav = () => {
 		render(MainNav, {
 			global: {

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event"   //import userEvent from installed library to stimulate events
 import { describe, it, expect } from "vitest";
 
-import TheSubnav from "@/components/TheSubnav.vue";
+import TheSubnav from "@/components/navigation/TheSubnav.vue";
 
 describe("TheSubnav", () => {
 	describe("When not on Jobs tab", () => {
@@ -27,6 +27,11 @@ describe("TheSubnav", () => {
 	describe("When on Jobs tab", () => {
 		it("displays job count", () => {
 			render(TheSubnav, {
+				global: {
+					stubs: {
+						FontAwesomIcon: true
+					}
+				},
 				data() {
 					return {
 						onJobTab: true,

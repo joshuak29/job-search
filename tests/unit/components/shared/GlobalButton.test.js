@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import {describe, it, expect} from "vitest";
 
-import GlobalButton from "@/components/GlobalButton.vue";
+import GlobalButton from "@/components/shared/GlobalButton.vue";
 
 describe("GlobalButton", () => {
 	it("renders text", () => {

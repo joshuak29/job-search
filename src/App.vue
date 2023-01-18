@@ -5,8 +5,8 @@
   <!-- all these would work too  & <MainNav></MainNav>, <MainNav /> & <main-nav></main-nav>-->
 </template>
 <script>
-import MainNav from "@/components/MainNav.vue";
-import TheHero from "@/components/TheHero.vue";
+import MainNav from "@/components/navigation/MainNav.vue";
+import TheHero from "@/components/jobSearch/TheHero.vue";
 
 export default {
   name: "App",

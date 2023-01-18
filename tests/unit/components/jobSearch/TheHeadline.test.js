@@ -1,6 +1,6 @@
 import {render, screen} from '@testing-library/vue';
 import { nextTick } from "vue"
-import TheHeadline from "@/components/TheHeadline.vue";
+import TheHeadline from "@/components/jobSearch/TheHeadline.vue";
 
 describe("TheHeadline", () => {
 	/* it("tracks wether the mock function has been called", () => {
