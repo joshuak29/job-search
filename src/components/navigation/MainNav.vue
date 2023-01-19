@@ -5,7 +5,7 @@
       <div
         class="mx-auto flex h-full flex-nowrap border-b border-solid border-brand-gray-1 px-8"
       >
-        <a href="/" class="flex h-full items-center text-xl">Kigali Careers</a>
+        <router-link :to="{ name: 'Home' }" class="flex h-full items-center text-xl">Kigali Careers</router-link>
         <nav class="ml-12 h-full">
           <ul class="flex h-full list-none">
             <li class="h-full">
@@ -26,7 +26,7 @@
               <a class="flex h-full items-center py-2.5" href="">Students</a>
             </li>
             <li class="ml-9 h-full">
-              <a class="flex h-full items-center py-2.5" href="">Jobs</a>
+              <router-link to="/jobs" class="flex h-full items-center py-2.5">Jobs</router-link>
             </li>
           </ul>
         </nav>

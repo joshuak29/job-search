@@ -51,7 +51,7 @@ describe("TheHeadline", () => {
 		const clearIntervalMock = vi.fn();
 		vi.stubGlobal("clearInterval", clearIntervalMock);
 		
-		const { unmount } = render(TheHeadline);
+		const { unmount }  = render(TheHeadline);
 		unmount()
 		
 		expect(clearIntervalMock).toHaveBeenCalled();

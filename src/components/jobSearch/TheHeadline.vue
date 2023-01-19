@@ -1,8 +1,7 @@
 <template>
 <section class="mb-16">
 	<h1 class="mb-14 text-8xl font-bold tracking-tighter">
-		<span :class="renderTextClasses">{{ renderText }}</span> 
-		<br />
+		<span :class="renderTextClasses">{{ renderText }}</span>
 		for everyone</h1>
 	<h2 class="text-3xl font-light" >Find your next job at Kigali Careers</h2>
 	</section>
@@ -53,5 +52,11 @@ export default {
 }
 .create {
 	color: #d93025
+}
+.renderText{
+	overflow: hidden;
+	max-height: 100px;
+	max-width: 300px;
+	display: block
 }
 </style>

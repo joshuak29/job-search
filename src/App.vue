@@ -1,15 +1,15 @@
 <template>
   <main-nav />
-  <the-hero />
-  
+  <!--<the-hero /> -->
+  <router-view />
   <!-- all these would work too  & <MainNav></MainNav>, <MainNav /> & <main-nav></main-nav>-->
 </template>
 <script>
 import MainNav from "@/components/navigation/MainNav.vue";
-import TheHero from "@/components/jobSearch/TheHero.vue";
+/*import TheHero from "@/components/jobSearch/TheHero.vue"; */
 
 export default {
   name: "App",
-  components: { MainNav, TheHero }, //Instead of putting the same key as the value ES6 allows to put just one input to stand for both
+  components: { MainNav}, //Instead of putting the same key as the value ES6 allows to put just one input to stand for both
 };
 </script>
