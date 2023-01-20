@@ -1,11 +1,6 @@
-const fruits = ["Apple", "Banana", "Orange"];
-const vegetables = ["Cucumber", "Radish"];
+const axios = require("axios");
+const url = "http://127.0.0.1:3000/jobs";
 
-// console.log([...fruits, ...vegetables]);
-export const oddOrEven = (number) => {
-  if (number % 2 === 0) {
-    return "Even";
-  } else {
-    return "Odd";
-  }
-};
+axios.get(url).then((res) => {
+	console.log(res)
+})

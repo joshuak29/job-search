@@ -1,4 +1,8 @@
-<template><div>Job page</div></template>
+<template>
+	<div>
+	Job Listing
+	</div>
+</template>
 <script>
 export default {
 	name: 'JobView',

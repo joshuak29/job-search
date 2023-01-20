@@ -3,7 +3,7 @@
 		<div class="flex h-full items-center px-8 bg-white">
 			<div v-if="onJobTab">
 				<font-awesome-icon :icon="['fas', 'search']" class="mr-3"/>
-				<span><span class="text-brand-green-1">2033</span> jobs matched</span>{{jobsMatched}}
+				<span><span class="text-brand-green-1">2033</span> jobs matched</span>
 			</div>
 		</div>
 	</div>
