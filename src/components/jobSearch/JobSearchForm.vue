@@ -5,6 +5,7 @@
 			<div class="flex h-full flex-1 relative items-center pr-3">
 				<label for="role" class="absolute left-0 -top-10">Role</label>
 				<input 
+					ref="joshua"
 					id="role"
 					type="text" 
 					v-model="role"
@@ -43,6 +44,9 @@ export default {
 		goToJobs() {
 			this.$router.push({ name: "Jobs", query: {role: this.role, where: this.where}})
 		}
+	},
+	mounted() {
+		this.$refs.joshua.focus();
 	}
 }
 </script>

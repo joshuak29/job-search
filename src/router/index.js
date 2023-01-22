@@ -25,6 +25,9 @@ const routes = [
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes,
+	scrollBehavior() {
+		return {top: 0, left: 0, behavior: "smooth"};  //set the scroll behaviour after a route change
+	}
 });
 
 export default router;

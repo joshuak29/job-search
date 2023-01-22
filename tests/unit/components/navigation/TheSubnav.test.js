@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event"   //import userEvent from installed library to stimulate events
 import { describe, it, expect } from "vitest";
+import { RouterLinkStub } from "@vue/test-utils";
 
 import TheSubnav from "@/components/navigation/TheSubnav.vue";
 
@@ -9,12 +10,13 @@ describe("TheSubnav", () => {
 		render(TheSubnav, {
 			global: {
 				mocks: {
-				$route: {
-					name: tabName
-				}
-			},
+					$route: {
+						name: tabName
+					}
+				},
 				stubs: {
-					FontAwesomIcon: true
+					FontAwesomeIcon: true,
+					RouterLink: RouterLinkStub
 				}
 			}
 		})
