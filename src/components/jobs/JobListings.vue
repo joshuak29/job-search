@@ -17,30 +17,34 @@
 </template>
 <script>
 import axios from "axios";
+import { mapActions, mapState } from "pinia";
 
+import { useJobsStore } from "@/stores/jobs"
 import JobListing from "@/components/jobs/JobListing.vue";
+//import getJobs from "@/utils/getJobs"
 export default {
 	name: "JobListings",
 	components: {
 		JobListing
 	},
 	mounted() {
-		this.getJobs()
+		this.fetchJobs()
 	},
 	data() {
 		return{
-			jobs: [],
 			pagination: 10,
 		}
 	},
 	methods: {
-		async getJobs() {
-			const baseUrl = import.meta.env.VITE_BASE_URL;
-			let data = await axios.get("http://127.0.0.1:3000/jobs");
-			this.jobs = data.data
-		}
+		...mapActions(useJobsStore, ["fetchJobs"]),
+		// async getJobs() {
+			// const url = import.meta.env.VITE_BASE_URL;
+			// console.log(url)
+			// this.jobs = await getJobs("http://127.0.0.1:3000/jobs");
+		// }
 	},
 	computed: {
+		...mapState(useJobsStore, ["jobs"]),
 		currentPage() {
 			return Number.parseInt(this.$route.query.page || "1");
 		},

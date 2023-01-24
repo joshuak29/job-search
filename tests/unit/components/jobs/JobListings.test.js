@@ -1,15 +1,16 @@
 import {render, screen} from "@testing-library/vue";
 import { RouterLinkStub } from "@vue/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
 import JobListings from "@/components/jobs/JobListings.vue";
-import axios from "axios";
-// console.log(axios)
+import { useJobsStore } from "@/stores/jobs";
 
-vi.mock("axios"); //turn all axios methods to vitest mocks
 describe("JobListings", () => {
 	const renderJobListings = (query) => {
+		const pinia = createTestingPinia();
 		render(JobListings, {
 			global: {
+				plugins: [pinia],
 				mocks: {
 					$route: {query: 
 								{
@@ -32,15 +33,18 @@ describe("JobListings", () => {
 	
 	
 	it("Hits the backend and returns data(jobs)", () => {
-		axios.get.mockResolvedValue({ data: []});
+		
 		
 		renderJobListings()
-		expect(axios.get).toHaveBeenCalledWith("http://127.0.0.1:3000/jobs")
+		const jobsStore = useJobsStore();
+		expect(jobsStore.fetchJobs).toHaveBeenCalled();
 	});
 	it("displays a maximum of 10 listings on page", async () => {
-		axios.get.mockResolvedValue({ data: Array(13).fill({}) }); //force to get an asynchronuos data property(mock7ResolvedValue) of an array of length of 15
+		//axios.get.mockResolvedValue({ data: Array(13).fill({}) }); //force to get an asynchronuos data property(mock7ResolvedValue) of an array of length of 15
 		renderJobListings({page: "1"});
 		
+		const jobsStore = useJobsStore();
+		jobsStore.jobs = Array(13).fill({})
 		
 		const jobs = await screen.findAllByRole('listitem'); //findAll waits for the asynchronous function to return data contrary to getAll that doesn't wait and some times returns without the data
 		expect(jobs).toHaveLength(10); 
@@ -48,6 +52,7 @@ describe("JobListings", () => {
 	describe("When params exclude page number", () => {
 		it("displays page number 1", () => {
 			renderJobListings({page: null});
+			
 			const pageNmbr = screen.getByText("Page 1");
 			expect(pageNmbr).toBeInTheDocument();
 		});
@@ -62,8 +67,12 @@ describe("JobListings", () => {
 	});
 	describe("When user is neither on the last nor the first page", () => {
 		it("show previous button", async () => {
-			axios.get.mockResolvedValue({ data: Array(30).fill({}) });
+			
 			renderJobListings({page: "2"});
+			
+			const jobsStore = useJobsStore();
+			jobsStore.jobs = Array(30).fill({})
+			
 			
 			await screen.findAllByRole('listitem');
 			const previousButton = screen.queryByRole('link', {name: /Previous/i});
@@ -71,8 +80,10 @@ describe("JobListings", () => {
 			expect(previousButton).toBeInTheDocument();
 		});
 		it("show next button", async () => {
-			axios.get.mockResolvedValue({ data: Array(30).fill({}) });
 			renderJobListings({page: "2"});
+			
+			const jobsStore = useJobsStore();
+			jobsStore.jobs = Array(30).fill({});
 			
 			await screen.findAllByRole('listitem');
 			const nextButton = screen.queryByRole('link', {name: /next/i});
@@ -81,8 +92,10 @@ describe("JobListings", () => {
 	});
 	describe("When user is on the first page", () => {
 		it("doesn't show the previous button", async () => {
-			axios.get.mockResolvedValue({ data: Array(20).fill({}) });
 			renderJobListings({page: "1"});
+			
+			const jobsStore = useJobsStore();
+			jobsStore.jobs = Array(20).fill({});
 			
 			await screen.findAllByRole('listitem');
 			const previousButton = screen.queryByRole('link', {name: /Previous/i});
@@ -91,8 +104,10 @@ describe("JobListings", () => {
 	});
 	describe("When the user is on the last page", () => {
 		it("doesn't show the next button", async () => {
-			axios.get.mockResolvedValue({ data: Array(100).fill({}) });
 			renderJobListings({page: "10"});
+			
+			const jobsStore = useJobsStore();
+			jobsStore.jobs = Array(100).fill({})
 			
 			await screen.findAllByRole('listitem');
 			const nextButton = screen.queryByRole('link', {name: /NEXT/i});

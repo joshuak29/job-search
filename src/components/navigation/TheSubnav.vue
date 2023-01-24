@@ -14,13 +14,7 @@ export default {
 	computed: {
 		onJobTab() {
 			return this.$route.name === "Jobs";
-		},
-		jobsMatched() {
-			console.log(this.$router)
 		}
-	},
-	mounted() {
-		console.log(this.$route)
 	}
 	
 }
