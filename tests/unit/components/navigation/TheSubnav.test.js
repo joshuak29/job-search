@@ -2,16 +2,20 @@ import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event"   //import userEvent from installed library to stimulate events
 import { describe, it, expect } from "vitest";
 import { RouterLinkStub } from "@vue/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
+import { useJobsStore } from "@/stores/jobs";
 import TheSubnav from "@/components/navigation/TheSubnav.vue";
 
 describe("TheSubnav", () => {
-	const renderTheSubnav = (tabName) => {
+	const renderTheSubnav = (routeName) => {
+		const pinia = createTestingPinia();
 		render(TheSubnav, {
 			global: {
+				plugins: [pinia],
 				mocks: {
 					$route: {
-						name: tabName
+						name: routeName
 					}
 				},
 				stubs: {
@@ -19,8 +23,8 @@ describe("TheSubnav", () => {
 					RouterLink: RouterLinkStub
 				}
 			}
-		})
-	}
+		});
+	};
 	describe("When not on Jobs tab", () => {
 		
 		it("doesn't display job count", () => {
@@ -32,10 +36,16 @@ describe("TheSubnav", () => {
 	})
 	describe("When on Jobs tab", () => {
 		
-		it("displays job count", () => {
-			renderTheSubnav('Jobs')
-			const jobCount = screen.getByText("2033")
+		it("displays job count", async () => {
+			renderTheSubnav('Jobs');
+
+
+			const jobsStore = useJobsStore();
+			jobsStore.filteredJobsByOrganizations = Array(5).fill({});
+
+			const jobCount = await screen.findByText(5);
 			expect(jobCount).toBeInTheDocument();
+			// screen.debug()
 		})
 	})
 })

@@ -14,8 +14,9 @@ const renderMainNav = () => {
 	}
 	const pinia = createTestingPinia({ stubActions: false });
 	render(MainNav, {
-		plugins: [pinia],
+		
 		global: {
+			plugins: [pinia],
 			mocks: {
 				$route,
 			},

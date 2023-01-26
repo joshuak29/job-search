@@ -1,9 +1,11 @@
 <template>
-<section class="mb-16">
-	<h1 class="mb-14 text-8xl font-bold tracking-tighter">
-		<span :class="renderTextClasses">{{ renderText }}</span>
-		for everyone</h1>
-	<h2 class="text-3xl font-light" >Find your next job at Kigali Careers</h2>
+	<section class="mb-16">
+		<h1 class="mb-14 text-8xl font-bold tracking-tighter">
+			<span :class="renderTextClasses">{{ renderText }}</span
+			><br />
+			for everyone
+		</h1>
+		<h2 class="text-3xl font-light">Find your next job at Kigali Careers</h2>
 	</section>
 </template>
 
@@ -14,49 +16,49 @@ export default {
 	data() {
 		return {
 			renderText: "Build",
-			interval: null
-		}
+			interval: null,
+		};
 	},
 	created() {
-		this.changeText()
+		this.changeText();
 	},
 	beforeUnmount() {
-		clearInterval(this.interval)
+		clearInterval(this.interval);
 	},
 	methods: {
 		changeText() {
 			this.interval = setInterval(() => {
 				const texts = ["Build", "Code", "Design", "Create"];
 				this.renderText = NextText(texts, this.renderText);
-			}, 3000)
-		}
+			}, 3000);
+		},
 	},
 	computed: {
-		renderTextClasses(){
+		renderTextClasses() {
 			return {
-				[this.renderText.toLowerCase()]: true
-			}
-		}
-	}
-}
+				[this.renderText.toLowerCase()]: true,
+			};
+		},
+	},
+};
 </script>
 <style scoped>
 .build {
-	color: #1a73e8
+	color: #1a73e8;
 }
 .code {
-	color: #34a853
+	color: #34a853;
 }
 .design {
-	color: #f9ab00
+	color: #f9ab00;
 }
 .create {
-	color: #d93025
+	color: #d93025;
 }
-.renderText{
+.renderText {
 	overflow: hidden;
 	max-height: 100px;
 	max-width: 300px;
-	display: block
+	display: block;
 }
 </style>
