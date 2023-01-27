@@ -46,7 +46,8 @@ export default {
 	methods: {
 		...mapActions(useUserStore, ["addSelectedJobTypes"]),
 		selectJobType() {
-			this.addSelectedJobTypes(this.selectedJobTypes)
+			this.addSelectedJobTypes(this.selectedJobTypes);
+			this.$router.push({name: "Jobs"})
 		},
 	}
 };

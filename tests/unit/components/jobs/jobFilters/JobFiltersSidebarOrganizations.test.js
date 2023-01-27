@@ -8,10 +8,14 @@ import { useUserStore } from "@/stores/user";
 
 describe("JobFiltersSidebarOrganizations", () => {
 	const renderJobFiltersSidebarOrganizations = () => {
+		const $router = {push: vi.fn()}
 		const pinia = createTestingPinia();
 		render(JobFiltersSidebarOrganizations, {
 			global: {
 				plugins: [pinia],
+				mocks: {
+					$router,
+				},
 				stubs: {
 					"font-awesome-icon": true,
 				},
@@ -20,6 +24,8 @@ describe("JobFiltersSidebarOrganizations", () => {
 				},
 			},
 		});
+
+		return { $router }
 	}
 	it("renders unique list of organizations from jobs", async () => {
 		renderJobFiltersSidebarOrganizations();
@@ -58,6 +64,24 @@ describe("JobFiltersSidebarOrganizations", () => {
 			expect(userStore.addSelectedOrganizations).toHaveBeenCalledWith([
 				"Yahoo",
 			]);
+		});
+		it("reroutes the user to the 1st page of results", async () => {
+			const { $router } = renderJobFiltersSidebarOrganizations();
+
+			const jobsStore = useJobsStore();
+			jobsStore.uniqueOrganizations = ["Yahoo"];
+
+			const button = screen.getByRole("button", {
+				name: /organizations/i,
+			});
+			await userEvent.click(button);
+
+			const checkbox = screen.getByRole("checkbox", {
+				name: /yahoo/i,
+			});
+			await userEvent.click(checkbox);
+
+			expect($router.push).toHaveBeenCalled();
 		});
 	});
 });

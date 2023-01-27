@@ -8,15 +8,21 @@ import JobFiltersSidebarJobTypes from "@/components/jobs/jobFilters/JobFiltersSi
 
 describe("JobFiltersSidebarJobTypes", () => {
 	const renderJobFiltersSidebarJobTypes = () => {
+		const $router = {push: vi.fn()}
 		const pinia = createTestingPinia();
 		render(JobFiltersSidebarJobTypes, {
 			global: {
 				plugins: [pinia],
+				mocks: {
+					$router,
+				},
 				stubs: {
 					"font-awesome-icon": true
 				}
 			},
 		});
+
+		return { $router }
 	}
 	it("renders a unique list of job types in jobs", async () => {
 		renderJobFiltersSidebarJobTypes();
@@ -56,5 +62,24 @@ describe("JobFiltersSidebarJobTypes", () => {
 			const userStore = useUserStore();
 			expect(userStore.addSelectedJobTypes).toHaveBeenCalledWith(["Intern"]);
 		});
+		it("reroutes the user to the 1st page of results", async () => {
+			const { $router } = renderJobFiltersSidebarJobTypes();
+
+			const jobsStore = useJobsStore();
+			jobsStore.uniqueJobTypes = ["Part-time", "Full-time", "Intern"];
+
+			const button = screen.getByRole("button", {
+				name: /job types/i,
+			});
+			await userEvent.click(button);
+
+			const checkbox = screen.getByRole("checkbox", {
+				name: /intern/i,
+			});
+			await userEvent.click(checkbox);
+
+			expect($router.push).toHaveBeenCalled();
+		})
+
 	});
 });

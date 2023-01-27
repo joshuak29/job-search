@@ -26,49 +26,20 @@ export const useJobsStore = defineStore("jobs", {
 			this.jobs.forEach((job) => UniqueJobTypes.add(job.jobType));
 			return UniqueJobTypes;
 		},
-		filteredJobsByOrganizations() {
+		includeJobByOrganization: () => (job) => {
 			const userStore = useUserStore();
-			const filterOrganizations = userStore.selectedOrganizations;
-
-			if (filterOrganizations.length < 1) {
-				return this.jobs;
-			} else {
-				return this.jobs.filter((job) => {
-					return filterOrganizations.includes(job.organization);
-				});
-			}
+			if (userStore.selectedOrganizations.length === 0) return true;
+			return userStore.selectedOrganizations.includes(job.organization);
 		},
-		filteredJobsByJobTypes() {
+		includeJobByJobType: () => (job) => {
 			const userStore = useUserStore();
-			const filterJobTypes = userStore.selectedJobTypes;
-
-			if (filterJobTypes.length < 1) {
-				return this.jobs;
-			} else {
-				return this.jobs.filter((job) => {
-					return filterJobTypes.includes(job.jobType);
-				});
-			}
+			if (userStore.selectedJobTypes.length === 0) return true;
+			return userStore.selectedJobTypes.includes(job.jobType);
 		},
 		filteredJobs() {
-			const userStore = useUserStore();
-			const filterOrganizations = userStore.selectedOrganizations;
-			const filterJobTypes = userStore.selectedJobTypes;
-
-			if(filterOrganizations.length < 1 && filterJobTypes.length < 1) {
-				return this.jobs
-			} else if(filterOrganizations.length >= 1 && filterJobTypes.length < 1) {
-				return this.filteredJobsByOrganizations
-			} else if (filterOrganizations.length < 1 && filterJobTypes.length >= 1){
-				return this.filteredJobsByJobTypes
-			} else if (filterOrganizations.length >= 1 && filterJobTypes.length >= 1){
-				return this.jobs.filter((job) => {
-					return (
-						filterOrganizations.includes(job.organization) &&
-						filterJobTypes.includes(job.jobType)
-					)
-				})
-			}
+			return this.jobs
+				.filter((job) => this.includeJobByOrganization(job))
+				.filter((job) => this.includeJobByJobType(job));
 		},
 	},
 });
