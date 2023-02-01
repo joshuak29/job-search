@@ -4,7 +4,8 @@ export const useUserStore = defineStore("user", {
 	state: () => ({
 		isLoggedIn: false,
 		selectedOrganizations: [],
-		selectedJobTypes: []
+		selectedJobTypes: [],
+		selectedDegrees: [],
 	}),
 	actions: {
 		loginUser() {
@@ -16,5 +17,8 @@ export const useUserStore = defineStore("user", {
 		addSelectedJobTypes(jobTypes) {
 			this.selectedJobTypes = jobTypes;
 		},
+		addSelectedDegrees(degrees) {
+			this.selectedDegrees = degrees;
+		}
 	}
 })

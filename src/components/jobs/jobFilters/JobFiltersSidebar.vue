@@ -9,8 +9,9 @@
 				</div>
 			</div>
 			
-			<job-filters-sidebar-organizations />
-			<job-filters-sidebar-job-types />
+			<organizations-filter />
+			<job-types-filter />
+			<degrees-filter />
 		</section>
 	</div>
 </template>
@@ -18,6 +19,7 @@
 import GlobalButton from "@/components/shared/GlobalButton.vue";
 import FilterCollapse from "@/components/shared/FilterCollapse.vue";
 import JobFiltersSidebarOrganizations from "@/components/jobs/jobFilters/JobFiltersSidebarOrganizations.vue";
+import JobFiltersSidebarDegrees from "@/components/jobs/jobFilters/JobFiltersSidebarDegrees.vue";
 import JobFiltersSidebarJobTypes from "@/components/jobs/jobFilters/JobFiltersSidebarJobTypes.vue";
 
 
@@ -26,8 +28,9 @@ export default {
 	components: {
 		GlobalButton,
 		FilterCollapse,
-		JobFiltersSidebarOrganizations,
-		JobFiltersSidebarJobTypes
+		"organizations-filter": JobFiltersSidebarOrganizations,
+		"job-types-filter": JobFiltersSidebarJobTypes,
+		"degrees-filter": JobFiltersSidebarDegrees
 	}
-}
+};
 </script>

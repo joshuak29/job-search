@@ -10,13 +10,17 @@ describe("userStore", () => {
 			const store = useUserStore();
 			expect(store.isLoggedIn).toBe(false);
 		});
-		it("keeps track of users organizations to filter by", () => {
+		it("keeps track of users choice of organizations to filter by", () => {
 			const store = useUserStore();
 			expect(store.selectedOrganizations).toEqual([]);
 		});
-		it("keeps track of users job types to filter by", () => {
+		it("keeps track of users choice of job types to filter by", () => {
 			const store = useUserStore();
 			expect(store.selectedJobTypes).toEqual([]);
+		});
+		it("keeps track of users choice of degrees to filter by", () => {
+			const store = useUserStore();
+			expect(store.selectedDegrees).toEqual([]);
 		});
 	});
 	describe("actions", () => {
@@ -33,7 +37,7 @@ describe("userStore", () => {
 
 				store.addSelectedOrganizations(["Vue", "React"]);
 				expect(store.selectedOrganizations).toEqual(["Vue", "React"])
-			})
+			});
 		});
 		describe("addSelectedJobTypes", () => {
 			it("updates the user's selected filter job types", () => {
@@ -41,7 +45,15 @@ describe("userStore", () => {
 
 				store.addSelectedJobTypes(["Full-time", "part-time"]);
 				expect(store.selectedJobTypes).toEqual(["Full-time", "part-time"])
-			})
-		})
-	})
-})
+			});
+		});
+		describe("addSelectedDegrees", () => {
+			it("updates the user's selected degrees", () => {
+				const userStore = useUserStore();
+
+				userStore.addSelectedDegrees(["Master's", "Ph.D"]);
+				expect(userStore.selectedDegrees).toEqual(["Master's", "Ph.D"]);
+			});
+		});
+	});
+});

@@ -66,6 +66,17 @@ describe("jobStore", () => {
 				expect(result).toEqual(new Set(["Intern", "Full-time"]));
 			});
 		});
+		describe("uniqueDegrees", () => {
+			it("returns a unique set of available degrees from the jobs", () => {
+				const jobsStore = useJobsStore();
+
+				jobsStore.jobs = [{degree: "Master's"}, {degree: "PhD"}, {degree: "PhD"}];
+
+				const results = jobsStore.uniqueDegrees;
+
+				expect(results).toEqual(new Set(["Master's", "PhD"]));
+			});
+		});
 		describe("includeJobByOrganization", () => {
 			it("returns true if job's organization is in user's selected organizations", () => {
 				const jobsStore = useJobsStore();
@@ -126,8 +137,39 @@ describe("jobStore", () => {
 				expect(results).toEqual(true)
 			});
 		});
+		describe("includeJobByDegree", () => {
+			it("always returns true if user didn't select any degrees for filtering", () => {
+				const jobsStore = useJobsStore();
+				const userStore = useUserStore();
+
+				userStore.selectedDegrees = [];
+
+				const results = jobsStore.includeJobByDegree({degree: "Master's", id: 1})
+				expect(results).toEqual(true)
+			});
+			it("returns true if degree is included in users's selected degrees", () => {
+				const userStore = useUserStore();
+				const jobsStore = useJobsStore();
+
+				userStore.selectedDegrees = ["Master's", "Ph.D"];
+
+				const results = jobsStore.includeJobByDegree({degree: "Master's", id: 1});
+				expect(results).toEqual(true)
+
+			});
+			it("returns false if degree is not included in users's selected degrees", () => {
+				const userStore = useUserStore();
+				const jobsStore = useJobsStore();
+				
+				userStore.selectedDegrees = ["Master's", "Ph.D"];
+
+				const results = jobsStore.includeJobByDegree({degree: "Bachelor's", id: 1});
+				expect(results).toEqual(false)
+
+			});
+		});
 		describe("filteredJobs", () => {
-			describe("when user has not seleected any filters", () => {
+			describe("when user has not selected any filters", () => {
 				it("returns all jobs", () => {
 					const userStore = useUserStore();
 					const jobsStore = useJobsStore();
@@ -142,7 +184,7 @@ describe("jobStore", () => {
 					expect(results).toHaveLength(20);
 				});
 			});
-			describe("when user selects only organizations filters and no job type filters", () => {
+			describe("when user selects only organizations filters", () => {
 				it("returns jobs filtered by organizations only", () => {
 					const userStore = useUserStore();
 					const jobsStore = useJobsStore();
@@ -155,6 +197,7 @@ describe("jobStore", () => {
 
 					userStore.selectedOrganizations = ["Google", "Samsung"];
 					userStore.selectedJobTypes = [];
+					userStore.selectedDegrees = [];
 
 					const results = jobsStore.filteredJobs;
 
@@ -164,8 +207,8 @@ describe("jobStore", () => {
 					]);
 				});
 			});
-			describe("when user selects only job type filters and no organizations filters", () => {
-				it("returns jobs filtered by job types pnly", () => {
+			describe("when user selects only job type filters", () => {
+				it("returns jobs filtered by job types only", () => {
 					const userStore = useUserStore();
 					const jobsStore = useJobsStore();
 
@@ -175,6 +218,7 @@ describe("jobStore", () => {
 						{ jobType: "Temporary" },
 					];
 
+					userStore.selectedDegrees = []
 					userStore.selectedOrganizations = [];
 					userStore.selectedJobTypes = ["Intern", "Temporary"];
 
@@ -186,26 +230,51 @@ describe("jobStore", () => {
 					]);
 				});
 			});
-			describe("When user has selected both organization and job type filters", () => {
-				it("computes and returns jobs that match both filters", () => {
+			describe("when user selects only degrees filters", () => {
+				it("returns jobs filtered by degrees only", () => {
+					const userStore = useUserStore();
+					const jobsStore = useJobsStore();
+
+					userStore.selectedDegrees = ["Associate", "Master's"];
+					userStore.selectedJobTypes = []
+					userStore.selectedOrganizations = [];
+
+					jobsStore.jobs = [
+						{degree: "Associate", organization: "Google"},
+						{degree: "Ph.D", organization: "Youtube"},
+						{degree: "Master's", jobType: "Intern"},
+						{degree: "Ph.D", organization: "Google"},
+						{degree: "Master's", jobType: "Temporary"},
+					];
+
+					const results = jobsStore.filteredJobs;
+					expect(results).toEqual([
+							{degree: "Associate", organization: "Google"},
+							{degree: "Master's", jobType: "Intern"},
+							{degree: "Master's", jobType: "Temporary"},
+						]);
+				});
+			});
+			describe("When user has selected filters in more than one category", () => {
+				it("computes and returns jobs that match all filters", () => {
 					const userStore = useUserStore();
 					const jobsStore = useJobsStore();
 
 					jobsStore.jobs = [
-						{ jobType: "Intern", organization: "Google" },
-						{ jobType: "Full-time", organization: "Youtube" },
-						{ jobType: "Temporary", organization: "Samsung" },
-						{ jobType: "Full-time", organization: "Samsung" },
+						{ jobType: "Intern", organization: "Google", degree: "Master's" },
+						{ jobType: "Full-time", organization: "Youtube", degree: "Ph.D" },
+						{ jobType: "Temporary", organization: "Samsung", degree: "Master's" },
+						{ jobType: "Full-time", organization: "Samsung", degree: "Associate" },
 					];
 
 					userStore.selectedOrganizations = ["Google", "Samsung"];
 					userStore.selectedJobTypes = ["Intern", "Full-time"];
+					userStore.selectedDegrees = ["Ph.d", "Associate"]
 
 					const results = jobsStore.filteredJobs;
 
 					expect(results).toEqual([
-						{ jobType: "Intern", organization: "Google" },
-						{ jobType: "Full-time", organization: "Samsung" },
+						{ jobType: "Full-time", organization: "Samsung", degree: "Associate"},
 					]);
 				});
 			});
