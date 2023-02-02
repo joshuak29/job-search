@@ -29,24 +29,29 @@
 		<global-button text="Search" type="secondary" class="rounded-r-3xl" />
 	</form>
 </template>
-<script>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
 import GlobalButton from '@/components/shared/GlobalButton.vue';
-export default {
-	name: "JobSearchForm",
-	components: {GlobalButton},
-	data() {
-		return {
-			role: "",
-			where: ""
-		}
-	},
-	methods: {
-		goToJobs() {
-			this.$router.push({ name: "Jobs", query: {role: this.role, where: this.where}})
-		}
-	},
-	mounted() {
-		this.$refs.joshua.focus();
-	}
+
+const role = ref("");
+const where = ref("");
+
+const router = useRouter();
+
+const goToJobs = () => {
+	router.push({ 
+		name: "Jobs", 
+		query: {role: role.value, where: where.value}
+	})
 }
+
+// export default {
+// 	methods: {
+// 		goToJobs() {
+// 			this.$router.push({ name: "Jobs", query: {role: this.role, where: this.where}})
+// 		}
+// 	}
+// }
 </script>

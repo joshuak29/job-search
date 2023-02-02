@@ -1,5 +1,5 @@
 <template>
-	<filter-collapse filter="Degrees">
+	<FilterCollapse filter="Degrees">
 		<div class="mt-5">
 			<fieldset>
 				<ul class="flex flex-row flex-wrap">
@@ -17,7 +17,7 @@
 				</ul>
 			</fieldset>
 		</div>
-	</filter-collapse>
+	</FilterCollapse>
 </template>
 <script>
 import FilterCollapse from "@/components/shared/FilterCollapse.vue";

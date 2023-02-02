@@ -62,7 +62,6 @@ export default {
 	},
 	computed: {
 		...mapState(useJobsStore, [
-			"jobs",
 			"filteredJobsByOrganizations",
 			"filteredJobsByJobTypes",
 			"filteredJobs",
@@ -77,7 +76,7 @@ export default {
 		},
 		nextPage() {
 			const nextPage = this.currentPage + 1;
-			const lastPage = Math.ceil(this.jobs.length / this.pagination);
+			const lastPage = Math.ceil(this.filteredJobs.length / this.pagination);
 			return nextPage <= lastPage ? nextPage : undefined;
 		},
 		paginatedJobs() {
