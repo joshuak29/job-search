@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
-
+export interface UserState {
+	isLoggedIn: Boolean,
+	selectedOrganizations: String[],
+	selectedJobTypes: String[],
+	selectedDegrees: String[]
+};
 export const useUserStore = defineStore("user", {
-	state: () => ({
+	state: (): UserState => ({
 		isLoggedIn: false,
 		selectedOrganizations: [],
 		selectedJobTypes: [],
@@ -11,13 +16,13 @@ export const useUserStore = defineStore("user", {
 		loginUser() {
 			this.isLoggedIn = true;
 		},
-		addSelectedOrganizations(organizations) {
+		addSelectedOrganizations(organizations: String[]) {
 			this.selectedOrganizations = organizations;
 		},
-		addSelectedJobTypes(jobTypes) {
+		addSelectedJobTypes(jobTypes: String[]) {
 			this.selectedJobTypes = jobTypes;
 		},
-		addSelectedDegrees(degrees) {
+		addSelectedDegrees(degrees: String[]) {
 			this.selectedDegrees = degrees;
 		}
 	}

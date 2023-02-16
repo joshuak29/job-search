@@ -1,9 +1,12 @@
 import { createPinia, setActivePinia } from "pinia";
 import axios from "axios";
-
+import type { Mock } from "vitest";
+import createJob from "../../utils/createJob";
 import { useJobsStore } from "@/stores/jobs";
 import { useUserStore } from "@/stores/user";
+
 vi.mock("axios");
+const axiosGetMock = axios.get as Mock;
 
 describe("jobStore", () => {
 	beforeEach(() => {
@@ -18,7 +21,7 @@ describe("jobStore", () => {
 	describe("actions", () => {
 		describe("fetch_jobs", () => {
 			it("makes API request and store received jobs", async () => {
-				axios.get.mockResolvedValue({ data: ["job 1", "job 2"] });
+				axiosGetMock.mockResolvedValue({ data: ["job 1", "job 2"] });
 				const store = useJobsStore();
 				await store.fetchJobs();
 				expect(store.jobs).toEqual(["job 1", "job 2"]);
@@ -30,15 +33,9 @@ describe("jobStore", () => {
 			it("returns a set of unique organizations from the jobs", () => {
 				const store = useJobsStore();
 				store.jobs = [
-					{
-						organization: "Youtube",
-					},
-					{
-						organization: "Oracle",
-					},
-					{
-						organization: "Oracle",
-					},
+					createJob({ organization: "Youtube" }),
+					createJob({ organization: "Oracle" }),
+					createJob({ organization: "Oracle" }),
 				];
 
 				const result = store.uniqueOrganizations;
@@ -50,15 +47,9 @@ describe("jobStore", () => {
 			it("returns a set of unique job types from the jobs", () => {
 				const store = useJobsStore();
 				store.jobs = [
-					{
-						jobType: "Intern",
-					},
-					{
-						jobType: "Full-time",
-					},
-					{
-						jobType: "Intern",
-					},
+					createJob({ jobType: "Intern" }),
+					createJob({ jobType: "Full-time" }),
+					createJob({ jobType: "Intern" }),
 				];
 
 				const result = store.uniqueJobTypes;
@@ -70,7 +61,7 @@ describe("jobStore", () => {
 			it("returns a unique set of available degrees from the jobs", () => {
 				const jobsStore = useJobsStore();
 
-				jobsStore.jobs = [{degree: "Master's"}, {degree: "PhD"}, {degree: "PhD"}];
+				jobsStore.jobs = [createJob({ degree: "Master's" }), createJob({ degree: "PhD" }), createJob({ degree: "PhD" })];
 
 				const results = jobsStore.uniqueDegrees;
 
@@ -84,7 +75,7 @@ describe("jobStore", () => {
 
 				userStore.selectedOrganizations = ["Youtube", "Oracle"];
 
-				const results = jobsStore.includeJobByOrganization({organization: "Youtube", id: 1})
+				const results = jobsStore.includeJobByOrganization(createJob({ organization: "Youtube", id: 1 }))
 				expect(results).toEqual(true)
 			});
 			it("returns false if job's organization is not in user's selected organizations", () => {
@@ -93,7 +84,7 @@ describe("jobStore", () => {
 
 				userStore.selectedOrganizations = ["Google", "Oracle"];
 
-				const results = jobsStore.includeJobByOrganization({organization: "Youtube", id: 1})
+				const results = jobsStore.includeJobByOrganization(createJob({ organization: "Youtube", id: 1 }))
 				expect(results).toEqual(false)
 			});
 			it("returns true if no organizations were selected for filtering", () => {
@@ -102,9 +93,9 @@ describe("jobStore", () => {
 
 				userStore.selectedOrganizations = [];
 
-				const results = jobsStore.includeJobByOrganization({organization: "Youtube", id: 1})
+				const results = jobsStore.includeJobByOrganization(createJob({ organization: "Youtube", id: 1 }))
 				expect(results).toEqual(true)
-					
+
 			});
 		});
 		describe("includeJobByJobType", () => {
@@ -114,7 +105,7 @@ describe("jobStore", () => {
 
 				userStore.selectedJobTypes = ["Intern"];
 
-				const results = jobsStore.includeJobByJobType({jobType: "Intern", id: 1})
+				const results = jobsStore.includeJobByJobType(createJob({ jobType: "Intern", id: 1 }))
 				expect(results).toEqual(true)
 
 			});
@@ -124,7 +115,7 @@ describe("jobStore", () => {
 
 				userStore.selectedJobTypes = ["Full-time"];
 
-				const results = jobsStore.includeJobByJobType({jobType: "Intern", id: 1})
+				const results = jobsStore.includeJobByJobType(createJob({ jobType: "Intern", id: 1 }))
 				expect(results).toEqual(false)
 			});
 			it("returns true if no job types were selected for filtering", () => {
@@ -133,7 +124,7 @@ describe("jobStore", () => {
 
 				userStore.selectedJobTypes = [];
 
-				const results = jobsStore.includeJobByJobType({jobType: "Intern", id: 1})
+				const results = jobsStore.includeJobByJobType({ jobType: "Intern", id: 1 } as unknown as Job)
 				expect(results).toEqual(true)
 			});
 		});
@@ -144,7 +135,7 @@ describe("jobStore", () => {
 
 				userStore.selectedDegrees = [];
 
-				const results = jobsStore.includeJobByDegree({degree: "Master's", id: 1})
+				const results = jobsStore.includeJobByDegree({ degree: "Master's", id: 1 } as unknown as Job)
 				expect(results).toEqual(true)
 			});
 			it("returns true if degree is included in users's selected degrees", () => {
@@ -153,17 +144,17 @@ describe("jobStore", () => {
 
 				userStore.selectedDegrees = ["Master's", "Ph.D"];
 
-				const results = jobsStore.includeJobByDegree({degree: "Master's", id: 1});
+				const results = jobsStore.includeJobByDegree({ degree: "Master's", id: 1 } as unknown as Job);
 				expect(results).toEqual(true)
 
 			});
 			it("returns false if degree is not included in users's selected degrees", () => {
 				const userStore = useUserStore();
 				const jobsStore = useJobsStore();
-				
+
 				userStore.selectedDegrees = ["Master's", "Ph.D"];
 
-				const results = jobsStore.includeJobByDegree({degree: "Bachelor's", id: 1});
+				const results = jobsStore.includeJobByDegree({ degree: "Bachelor's", id: 1 } as unknown as Job);
 				expect(results).toEqual(false)
 
 			});
@@ -193,7 +184,7 @@ describe("jobStore", () => {
 						{ organization: "Google" },
 						{ organization: "Youtube" },
 						{ organization: "Samsung" },
-					];
+					] as unknown as Job[];
 
 					userStore.selectedOrganizations = ["Google", "Samsung"];
 					userStore.selectedJobTypes = [];
@@ -216,7 +207,7 @@ describe("jobStore", () => {
 						{ jobType: "Intern" },
 						{ jobType: "Full-time" },
 						{ jobType: "Temporary" },
-					];
+					] as unknown as Job[];
 
 					userStore.selectedDegrees = []
 					userStore.selectedOrganizations = [];
@@ -240,19 +231,19 @@ describe("jobStore", () => {
 					userStore.selectedOrganizations = [];
 
 					jobsStore.jobs = [
-						{degree: "Associate", organization: "Google"},
-						{degree: "Ph.D", organization: "Youtube"},
-						{degree: "Master's", jobType: "Intern"},
-						{degree: "Ph.D", organization: "Google"},
-						{degree: "Master's", jobType: "Temporary"},
-					];
+						{ degree: "Associate", organization: "Google" },
+						{ degree: "Ph.D", organization: "Youtube" },
+						{ degree: "Master's", jobType: "Intern" },
+						{ degree: "Ph.D", organization: "Google" },
+						{ degree: "Master's", jobType: "Temporary" },
+					] as unknown as Job[];
 
 					const results = jobsStore.filteredJobs;
 					expect(results).toEqual([
-							{degree: "Associate", organization: "Google"},
-							{degree: "Master's", jobType: "Intern"},
-							{degree: "Master's", jobType: "Temporary"},
-						]);
+						{ degree: "Associate", organization: "Google" },
+						{ degree: "Master's", jobType: "Intern" },
+						{ degree: "Master's", jobType: "Temporary" },
+					]);
 				});
 			});
 			describe("When user has selected filters in more than one category", () => {
@@ -265,7 +256,7 @@ describe("jobStore", () => {
 						{ jobType: "Full-time", organization: "Youtube", degree: "Ph.D" },
 						{ jobType: "Temporary", organization: "Samsung", degree: "Master's" },
 						{ jobType: "Full-time", organization: "Samsung", degree: "Associate" },
-					];
+					] as unknown as Job[];
 
 					userStore.selectedOrganizations = ["Google", "Samsung"];
 					userStore.selectedJobTypes = ["Intern", "Full-time"];
@@ -274,7 +265,7 @@ describe("jobStore", () => {
 					const results = jobsStore.filteredJobs;
 
 					expect(results).toEqual([
-						{ jobType: "Full-time", organization: "Samsung", degree: "Associate"},
+						{ jobType: "Full-time", organization: "Samsung", degree: "Associate" },
 					]);
 				});
 			});

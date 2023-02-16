@@ -1,38 +1,38 @@
 <template>
-	<button :class="buttonClass">{{ text }}</button>
+  <button :class="buttonClass">{{ text }}</button>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed, toRefs } from "vue";
 
 const props = defineProps({
-	type: {
-		type: String,
-		required: false,
-		default: "primary",
-		validator(value) {
-			return ["primary", "secondary"].includes(value);
-		},
-	},
-	text: {
-		type: String,
-		required: true,
-	},
+  type: {
+    type: String,
+    required: false,
+    default: "primary",
+    validator(value) {
+      return ["primary", "secondary"].includes(value);
+    },
+  },
+  text: {
+    type: String,
+    required: true,
+  },
 });
 
 const { type } = toRefs(props);
 
 const buttonClass = computed(() => {
-	return { [type.value]: true };
+  return { [type.value]: true };
 });
 </script>
 <style scoped>
 button {
-	@apply px-5 py-3 font-medium;
+  @apply px-5 py-3 font-medium;
 }
 .primary {
-	@apply rounded border-0 bg-brand-blue-1 text-white hover:shadow-blue;
+  @apply rounded border-0 bg-brand-blue-1 text-white hover:shadow-blue;
 }
 .secondary {
-	@apply bg-transparent text-brand-blue-2 hover:bg-brand-blue-1 hover:text-white;
+  @apply bg-transparent text-brand-blue-2 hover:bg-brand-blue-1 hover:text-white;
 }
 </style>

@@ -1,9 +1,11 @@
-import {render, screen} from "@testing-library/vue";
-import {RouterLinkStub} from "@vue/test-utils";
+import { render, screen } from "@testing-library/vue";
+import { RouterLinkStub } from "@vue/test-utils";
 import JobListing from "@/components/jobs/JobListing.vue";
+import type { Job } from "@/utils/types";
+// import createJob from "../../../utils/createJob";
 
 describe("JobListing", () => {
-	const renderJobListing = () => {
+	const renderJobListing = (propsData: Partial<Job>) => {
 		render(JobListing, {
 			global: {
 				stubs: {
@@ -11,37 +13,38 @@ describe("JobListing", () => {
 				},
 			},
 			props: {
-				data: {
+				job: {
 					title: "Joshua Rukundo",
 					organization: "Cimerwa",
 					locations: ["Nyarugenge", "Kicukiro"],
-					minimumQualifications: ["Vue Js 3", "SQL"]
+					minimumQualifications: ["Vue Js 3", "SQL"],
+					...propsData
 				}
 			}
 		});
 	}
 	it("renders job title", () => {
-		renderJobListing();
-		const title = screen.getByText("Joshua Rukundo")
+		renderJobListing({ title: "Joshua Elise" });
+		const title = screen.getByText("Joshua Elise")
 		expect(title).toBeInTheDocument();
-		
+
 	})
 	it("renders job organization", () => {
-		renderJobListing();
-		
+		renderJobListing({});
+
 		const title = screen.getByText('Cimerwa');
 		expect(title).toBeInTheDocument();
-		
+
 	})
 	it("renders job locations", () => {
-		renderJobListing();
-		
+		renderJobListing({});
+
 		expect(screen.getByText("Nyarugenge")).toBeInTheDocument();
 		expect(screen.getByText("Kicukiro")).toBeInTheDocument();
 	})
 	it("renders job qualifications", () => {
-		renderJobListing();
-		
+		renderJobListing({});
+
 		expect(screen.getByText("Vue Js 3")).toBeInTheDocument();
 		expect(screen.getByText("SQL")).toBeInTheDocument();
 	})

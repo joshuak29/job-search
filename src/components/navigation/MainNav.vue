@@ -12,14 +12,16 @@
         <nav class="ml-12 h-full">
           <ul class="flex h-full list-none">
             <li class="h-full">
-              <router-link class="flex h-full items-center py-2.5" to="/teams">Teams</router-link>
+              <router-link class="flex h-full items-center py-2.5" to="/teams"
+                >Teams</router-link
+              >
             </li>
             <li class="ml-9 h-full">
               <a class="flex h-full items-center py-2.5" href="">Location</a>
             </li>
             <li class="ml-9 h-full">
               <a class="flex h-full items-center py-2.5" href=""
-                >Life at Kigali centers</a
+                >Life at Kigali Careers centers</a
               >
             </li>
             <li class="ml-9 h-full">
@@ -45,29 +47,17 @@
   </header>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { computed } from "vue";
+
 import GlobalButton from "@/components/shared/GlobalButton.vue";
 import ProfileImage from "@/components/navigation/ProfileImage.vue";
 import TheSubnav from "@/components/navigation/TheSubnav.vue";
+import { useUserStore } from "@/stores/user";
 
-import { mapState, mapActions } from "pinia";
-import { useUserStore } from "@/stores/user.js";
+const userStore = useUserStore();
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+const loginUser = () => userStore.loginUser();
 
-export default {
-  name: "MainNav",
-  components: { GlobalButton, ProfileImage, TheSubnav },
-  data() {
-    return {
-      company: "Careers",
-    };
-  },
 
-  computed: {
-    ...mapState(useUserStore, ["isLoggedIn"]), //mapStores returns an object of all the stores properties in the userStore object(naming: [id]Store)
-    //by the above syntax we will have access to the obect userStore with all the data from the store named "user"
-  },
-  methods: {
-    ...mapActions(useUserStore, ["loginUser"]),
-  },
-};
 </script>
