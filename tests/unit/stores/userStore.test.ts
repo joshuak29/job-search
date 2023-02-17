@@ -22,6 +22,10 @@ describe("userStore", () => {
 			const store = useUserStore();
 			expect(store.selectedDegrees).toEqual([]);
 		});
+		it("stores the users search term", () => {
+			const store = useUserStore();
+			expect(store.searchTerm).toEqual("");
+		});
 	});
 	describe("actions", () => {
 		describe("loginUser", () => {
@@ -30,6 +34,14 @@ describe("userStore", () => {
 				store.loginUser();
 				expect(store.isLoggedIn).toBe(true)
 			});
+		});
+		describe("updateSearch", () => {
+			it("updates the searchTerm", () => {
+				const store = useUserStore();
+
+				store.updateSearch("Joshua");
+				expect(store.searchTerm).toEqual("Joshua");
+			})
 		});
 		describe("addSelectedOrganizations", () => {
 			it("updates the user's selected filter organizations", () => {
@@ -53,6 +65,21 @@ describe("userStore", () => {
 
 				userStore.addSelectedDegrees(["Master's", "Ph.D"]);
 				expect(userStore.selectedDegrees).toEqual(["Master's", "Ph.D"]);
+			});
+		});
+		describe("clearFilters", () => {
+			it("resets all the user's chosen filters to empy strings", () => {
+			setActivePinia(createPinia());
+			
+			const userStore = useUserStore();
+			userStore.selectedDegrees = Array(10).fill("Degrees");
+			userStore.selectedJobTypes = Array(10).fill("JobTypes");
+			userStore.selectedOrganizations = Array(10).fill("Organizations");
+
+				userStore.clearFilters();
+				expect(userStore.selectedOrganizations).toEqual([]);
+				expect(userStore.selectedJobTypes).toEqual([]);
+				expect(userStore.selectedDegrees).toEqual([]);
 			});
 		});
 	});

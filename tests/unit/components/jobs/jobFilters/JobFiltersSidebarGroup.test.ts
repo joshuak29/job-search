@@ -1,11 +1,15 @@
 import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
+import { createTestingPinia } from "@pinia/testing";
 
 import JobFiltersSidebarGroup from "@/components/jobs/jobFilters/JobFiltersSidebarGroup.vue";
 
 describe("JobFiltersSidebarGroup", () => {
 	it("displays the title", () => {
 		render(JobFiltersSidebarGroup, {
+			global: {
+				plugins: [createTestingPinia()]
+			},
 			props: {
 				title: "Organizations",
 			},

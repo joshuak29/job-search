@@ -4,6 +4,7 @@ import type { Mock } from "vitest";
 import createJob from "../../utils/createJob";
 import { useJobsStore } from "@/stores/jobs";
 import { useUserStore } from "@/stores/user";
+import type { Job } from "@/utils/types";
 
 vi.mock("axios");
 const axiosGetMock = axios.get as Mock;
@@ -159,6 +160,35 @@ describe("jobStore", () => {
 
 			});
 		});
+		describe("includeJobBySkill", () => {
+			it("always return true if user hasn't searched for any skill", () => {
+				const jobsStore = useJobsStore();
+				const userStore = useUserStore();
+
+				userStore.searchTerm = "";
+
+				const results = jobsStore.includeJobBySkill(createJob({jobType: "joshua", id: 2}));
+				expect(results).toEqual(true);
+			});
+			it("returns true if searchTerm is icluded in the job's title", () => {
+				const jobsStore = useJobsStore();
+				const userStore = useUserStore();
+
+				userStore.searchTerm = "Joshua";
+
+				const resutls = jobsStore.includeJobBySkill(createJob({title: "Joshua only", id: 1}));
+				expect(resutls).toEqual(true);
+			});
+			it("returns false f searchTerm is not icluded in the job's title", () => {
+				const jobsStore = useJobsStore();
+				const userStore = useUserStore();
+
+				userStore.searchTerm = "Elise";
+
+				const resutls = jobsStore.includeJobBySkill(createJob({title: "Joshua only", id: 1}));
+				expect(resutls).toEqual(false);
+			});
+		});
 		describe("filteredJobs", () => {
 			describe("when user has not selected any filters", () => {
 				it("returns all jobs", () => {
@@ -243,6 +273,30 @@ describe("jobStore", () => {
 						{ degree: "Associate", organization: "Google" },
 						{ degree: "Master's", jobType: "Intern" },
 						{ degree: "Master's", jobType: "Temporary" },
+					]);
+				});
+			});
+			describe("when user selects only skill filters", () => {
+				it("returns jobs filtered by skills only", () => {
+					const userStore = useUserStore();
+					const jobsStore = useJobsStore();
+
+					jobsStore.jobs = [
+						{ title: "Intern needed" },
+						{ title: "Full-time vue developer" },
+						{ title: "Junior Vue developer" },
+					] as unknown as Job[];
+
+					userStore.searchTerm = "vue"
+					userStore.selectedOrganizations = [];
+					userStore.selectedJobTypes = [];
+					userStore.selectedDegrees = []
+
+					const results = jobsStore.filteredJobs;
+
+					expect(results).toEqual([
+						{ title: "Full-time vue developer" },
+						{ title: "Junior Vue developer" },
 					]);
 				});
 			});

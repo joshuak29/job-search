@@ -13,9 +13,10 @@
       <div class="flex flex-row justify-between">
         <h3 class="my-4 text-base font-semibold">What do you want to do?</h3>
         <div class="flex items-center text-sm">
-          <GlobalButton text="Clear Filters" type="secondary" />
+          <GlobalButton text="Clear Filters" type="secondary" @click="clearAllFilters" />
         </div>
       </div>
+      <job-filters-sidebar-skills />
       <job-filters-sidebar-group
         title="Organizations"
         :action="userStore.addSelectedOrganizations"
@@ -37,10 +38,19 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { useJobsStore } from "@/stores/jobs";
+import { useRouter } from "vue-router";
 
 import GlobalButton from "@/components/shared/GlobalButton.vue";
 import JobFiltersSidebarGroup from "@/components/jobs/jobFilters/JobFiltersSidebarGroup.vue";
+import JobFiltersSidebarSkills from "./JobFiltersSidebarSkills.vue";
 
-const userStore = useUserStore();
+
 const jobsStore = useJobsStore();
+const userStore = useUserStore();
+
+const router = useRouter();
+const clearAllFilters = () => {
+  userStore.clearFilters();
+  router.push({name: "Jobs", query: {"page": 1}})
+}
 </script>

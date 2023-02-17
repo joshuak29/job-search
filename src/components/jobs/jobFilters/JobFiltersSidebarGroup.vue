@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { ref, computed, type PropType } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 import FilterCollapse from "@/components/shared/FilterCollapse.vue";
 
@@ -47,4 +48,15 @@ const selectFilter = computed(() => {
   props.action(selectedFilters.value);
   router.push({ name: "Jobs" });
 });
+
+const userStore = useUserStore();
+
+userStore.$onAction(({ after, name }) => {
+  after(() => {
+    if(name === "clearFilters") {
+      selectedFilters.value = []
+    }
+  })
+});
+
 </script>
